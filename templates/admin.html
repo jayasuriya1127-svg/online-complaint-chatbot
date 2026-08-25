@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | ComplaintCare</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="dashboard-body">
+
+
+<nav class="dashboard-nav">
+
+    <div class="logo">
+
+        <span>CC</span>
+
+        ComplaintCare
+        <small class="admin-tag">
+            ADMIN
+        </small>
+
+    </div>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+</nav>
+
+
+<main class="dashboard">
+
+    <div class="welcome">
+
+        <div>
+
+            <span class="small-label">
+                ADMIN PANEL
+            </span>
+
+            <h1>
+                Complaint Overview
+            </h1>
+
+            <p>
+                Manage and resolve user complaints.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-stats">
+
+        <div class="dash-card">
+
+            <div class="dash-icon purple">
+                📋
+            </div>
+
+            <div>
+
+                <span>Total</span>
+
+                <strong id="adminTotal">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon orange">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>Pending</span>
+
+                <strong id="adminPending">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon blue">
+                🔄
+            </div>
+
+            <div>
+
+                <span>In Progress</span>
+
+                <strong id="adminProgress">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon green">
+                ✓
+            </div>
+
+            <div>
+
+                <span>Resolved</span>
+
+                <strong id="adminResolved">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    All Complaints
+                </h2>
+
+                <p>
+                    Review and update complaints
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>User</th>
+
+                        <th>Title</th>
+
+                        <th>Category</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="adminComplaintList">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+</body>
+
+</html>

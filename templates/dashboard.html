@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | ComplaintCare</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="dashboard-body">
+
+
+<nav class="dashboard-nav">
+
+    <div class="logo">
+        <span>CC</span>
+        ComplaintCare
+    </div>
+
+    <div class="dashboard-user">
+
+        <span id="userName">
+            User
+        </span>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</nav>
+
+
+<main class="dashboard">
+
+    <div class="welcome">
+
+        <div>
+
+            <span class="small-label">
+                DASHBOARD
+            </span>
+
+            <h1>
+                Welcome back! 👋
+            </h1>
+
+            <p>
+                Manage and track your complaints.
+            </p>
+
+        </div>
+
+        <a href="/complaint"
+           class="primary-btn">
+
+            + New Complaint
+
+        </a>
+
+    </div>
+
+
+    <div class="dashboard-stats">
+
+        <div class="dash-card">
+
+            <div class="dash-icon purple">
+                📋
+            </div>
+
+            <div>
+
+                <span>Total Complaints</span>
+
+                <strong id="totalComplaints">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon orange">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>Pending</span>
+
+                <strong id="pendingComplaints">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon blue">
+                🔄
+            </div>
+
+            <div>
+
+                <span>In Progress</span>
+
+                <strong id="progressComplaints">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dash-card">
+
+            <div class="dash-icon green">
+                ✓
+            </div>
+
+            <div>
+
+                <span>Resolved</span>
+
+                <strong id="resolvedComplaints">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>Recent Complaints</h2>
+
+                <p>
+                    Track your latest complaints
+                </p>
+
+            </div>
+
+            <a href="/complaint">
+                Submit New
+            </a>
+
+        </div>
+
+
+        <div id="complaintList"
+             class="complaint-list">
+
+            <div class="empty-state">
+
+                <div>📭</div>
+
+                <h3>No complaints yet</h3>
+
+                <p>
+                    Submit your first complaint
+                    to get started.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+</body>
+
+</html>

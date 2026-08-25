@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | ComplaintCare</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="auth-body">
+
+
+<div class="auth-container">
+
+
+    <div class="auth-left">
+
+        <div class="auth-brand">
+            <span>CC</span>
+            ComplaintCare
+        </div>
+
+        <div class="auth-message">
+
+            <div class="auth-badge">
+                ✨ Join Us
+            </div>
+
+            <h1>
+                Create your<br>
+                <span>account.</span>
+            </h1>
+
+            <p>
+                Join ComplaintCare and make your
+                voice heard. Submit and track
+                complaints effortlessly.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="auth-right">
+
+        <div class="login-card">
+
+            <div class="mobile-logo">
+                CC
+            </div>
+
+            <h2>Create an account</h2>
+
+            <p class="auth-subtitle">
+                Get started with ComplaintCare
+            </p>
+
+
+            <form id="registerForm">
+
+                <label>Full Name</label>
+
+                <div class="input-wrapper">
+
+                    <span>👤</span>
+
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <label>Email Address</label>
+
+                <div class="input-wrapper">
+
+                    <span>✉</span>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <label>Password</label>
+
+                <div class="input-wrapper">
+
+                    <span>🔒</span>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Minimum 6 characters"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-btn">
+
+                    Create Account
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            <div id="registerMessage"
+                 class="message-box">
+            </div>
+
+
+            <p class="register-text">
+
+                Already have an account?
+
+                <a href="/login">
+                    Sign in
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module"
+        src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+</body>
+
+</html>

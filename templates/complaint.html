@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | ComplaintCare</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="dashboard-nav">
+
+    <div class="logo">
+
+        <span>CC</span>
+
+        ComplaintCare
+
+    </div>
+
+
+    <div class="dashboard-user">
+
+        <span id="userName">
+            Loading...
+        </span>
+
+
+        <button
+            type="button"
+            id="logoutBtn">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+===================================================== -->
+
+<main class="dashboard">
+
+
+    <!-- =================================================
+         WELCOME SECTION
+    ================================================== -->
+
+    <section class="welcome">
+
+        <div>
+
+            <span class="small-label">
+
+                DASHBOARD
+
+            </span>
+
+
+            <h1>
+
+                Welcome back! 👋
+
+            </h1>
+
+
+            <p>
+
+                Manage and track your complaints.
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="/complaint"
+            class="primary-btn">
+
+            + New Complaint
+
+        </a>
+
+    </section>
+
+
+
+    <!-- =================================================
+         DASHBOARD STATISTICS
+    ================================================== -->
+
+    <section class="dashboard-stats">
+
+
+        <!-- TOTAL -->
+
+        <div class="dash-card">
+
+            <div class="dash-icon purple">
+
+                📋
+
+            </div>
+
+
+            <div>
+
+                <span>
+
+                    Total Complaints
+
+                </span>
+
+
+                <strong id="totalComplaints">
+
+                    0
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PENDING -->
+
+        <div class="dash-card">
+
+            <div class="dash-icon orange">
+
+                ⏳
+
+            </div>
+
+
+            <div>
+
+                <span>
+
+                    Pending
+
+                </span>
+
+
+                <strong id="pendingComplaints">
+
+                    0
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- IN PROGRESS -->
+
+        <div class="dash-card">
+
+            <div class="dash-icon blue">
+
+                🔄
+
+            </div>
+
+
+            <div>
+
+                <span>
+
+                    In Progress
+
+                </span>
+
+
+                <strong id="progressComplaints">
+
+                    0
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- RESOLVED -->
+
+        <div class="dash-card">
+
+            <div class="dash-icon green">
+
+                ✓
+
+            </div>
+
+
+            <div>
+
+                <span>
+
+                    Resolved
+
+                </span>
+
+
+                <strong id="resolvedComplaints">
+
+                    0
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         COMPLAINT SECTION
+    ================================================== -->
+
+    <section class="dashboard-section">
+
+
+        <!-- HEADER -->
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+
+                    Recent Complaints
+
+                </h2>
+
+
+                <p>
+
+                    Track your latest complaints
+
+                </p>
+
+            </div>
+
+
+            <a href="/complaint">
+
+                Submit New
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             LOADING
+        ================================================== -->
+
+        <div
+            id="complaintLoading"
+            class="empty-state">
+
+            <div>
+
+                ⏳
+
+            </div>
+
+
+            <h3>
+
+                Loading complaints...
+
+            </h3>
+
+
+            <p>
+
+                Please wait while we load your complaints.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             COMPLAINT LIST
+        ================================================== -->
+
+        <div
+            id="complaintList"
+            class="complaint-list">
+
+        </div>
+
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div
+            id="emptyComplaint"
+            class="empty-state"
+            style="display:none;">
+
+            <div>
+
+                📭
+
+            </div>
+
+
+            <h3>
+
+                No complaints yet
+
+            </h3>
+
+
+            <p>
+
+                Submit your first complaint
+                to get started.
+
+            </p>
+
+
+            <a
+                href="/complaint"
+                class="primary-btn">
+
+                + Submit Complaint
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ERROR STATE
+        ================================================== -->
+
+        <div
+            id="complaintError"
+            class="empty-state"
+            style="display:none;">
+
+            <div>
+
+                ⚠️
+
+            </div>
+
+
+            <h3>
+
+                Unable to load complaints
+
+            </h3>
+
+
+            <p id="complaintErrorMessage">
+
+                Please try again.
+
+            </p>
+
+
+            <button
+                type="button"
+                class="primary-btn"
+                id="retryComplaintsBtn">
+
+                Retry
+
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script
+    type="module"
+    src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+
+
+<!-- =====================================================
+     DASHBOARD BUTTON HANDLERS
+===================================================== -->
+
+<script type="module">
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    typeof window.logout ===
+                    "function"
+                ) {
+
+                    window.logout();
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    const retryBtn =
+        document.getElementById(
+            "retryComplaintsBtn"
+        );
+
+
+    if (retryBtn) {
+
+        retryBtn.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    typeof window.loadComplaints ===
+                    "function"
+                ) {
+
+                    window.loadComplaints();
+
+                } else {
+
+                    window.location.reload();
+
+                }
+
+            }
+        );
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
