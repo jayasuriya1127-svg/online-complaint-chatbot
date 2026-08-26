@@ -1,6 +1,9 @@
 // =========================================================
-// ONLINE COMPLAINT - FRONTEND CONTROLLER
+// ONLINE COMPLAINT - COMPLETE FRONTEND CONTROLLER
 // =========================================================
+
+console.log("🚀 Online Complaint frontend loaded successfully");
+
 
 // =========================================================
 // FIREBASE IMPORTS
@@ -58,14 +61,53 @@ const firebaseConfig = {
 // INITIALIZE FIREBASE
 // =========================================================
 
-const app =
+const firebaseApp =
     initializeApp(firebaseConfig);
 
 const auth =
-    getAuth(app);
+    getAuth(firebaseApp);
 
 const db =
-    getFirestore(app);
+    getFirestore(firebaseApp);
+
+
+// =========================================================
+// HELPER - SAFE JSON RESPONSE
+// =========================================================
+
+async function getResponseJSON(response) {
+
+    const text = await response.text();
+
+    if (!text) {
+
+        return {
+            success: false,
+            message: "Empty server response."
+        };
+
+    }
+
+    try {
+
+        return JSON.parse(text);
+
+    } catch (error) {
+
+        console.error(
+            "Invalid JSON response:",
+            text
+        );
+
+        return {
+            success: false,
+            message:
+                "Server returned an invalid response."
+        };
+
+    }
+
+}
 
 
 // =========================================================
@@ -75,7 +117,6 @@ const db =
 const registerForm =
     document.getElementById("registerForm");
 
-
 if (registerForm) {
 
     registerForm.addEventListener(
@@ -84,40 +125,66 @@ if (registerForm) {
 
             event.preventDefault();
 
+            const nameElement =
+                document.getElementById("registerName");
 
-            const name =
-                document.getElementById(
-                    "registerName"
-                ).value.trim();
+            const emailElement =
+                document.getElementById("registerEmail");
 
-
-            const email =
-                document.getElementById(
-                    "registerEmail"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "registerPassword"
-                ).value;
-
+            const passwordElement =
+                document.getElementById("registerPassword");
 
             const message =
-                document.getElementById(
-                    "registerMessage"
-                );
+                document.getElementById("registerMessage");
+
+
+            const name =
+                nameElement
+                    ? nameElement.value.trim()
+                    : "";
+
+            const email =
+                emailElement
+                    ? emailElement.value.trim()
+                    : "";
+
+            const password =
+                passwordElement
+                    ? passwordElement.value
+                    : "";
 
 
             if (!name || !email || !password) {
 
-                message.className =
-                    "message-box error";
+                if (message) {
 
-                message.innerText =
-                    "Please fill all fields.";
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        "Please fill all fields.";
+
+                }
 
                 return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                if (message) {
+
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        "Password must contain at least 6 characters.";
+
+                }
+
+                return;
+
             }
 
 
@@ -135,7 +202,6 @@ if (registerForm) {
                     userCredential.user;
 
 
-                // Set display name
                 await updateProfile(
                     user,
                     {
@@ -144,7 +210,6 @@ if (registerForm) {
                 );
 
 
-                // Save user data in Firestore
                 await setDoc(
                     doc(
                         db,
@@ -166,11 +231,15 @@ if (registerForm) {
                 );
 
 
-                message.className =
-                    "message-box success";
+                if (message) {
 
-                message.innerText =
-                    "Account created successfully!";
+                    message.className =
+                        "message-box success";
+
+                    message.innerText =
+                        "Account created successfully!";
+
+                }
 
 
                 setTimeout(
@@ -180,23 +249,27 @@ if (registerForm) {
                             "/dashboard";
 
                     },
-                    1200
+                    1000
                 );
 
 
             } catch (error) {
 
                 console.error(
-                    "Registration error:",
+                    "❌ Registration error:",
                     error
                 );
 
 
-                message.className =
-                    "message-box error";
+                if (message) {
 
-                message.innerText =
-                    getFirebaseError(error);
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        getFirebaseError(error);
+
+                }
 
             }
 
@@ -213,7 +286,6 @@ if (registerForm) {
 const loginForm =
     document.getElementById("loginForm");
 
-
 if (loginForm) {
 
     loginForm.addEventListener(
@@ -223,33 +295,41 @@ if (loginForm) {
             event.preventDefault();
 
 
-            const email =
-                document.getElementById(
-                    "loginEmail"
-                ).value.trim();
+            const emailElement =
+                document.getElementById("loginEmail");
 
-
-            const password =
-                document.getElementById(
-                    "loginPassword"
-                ).value;
-
+            const passwordElement =
+                document.getElementById("loginPassword");
 
             const message =
-                document.getElementById(
-                    "loginMessage"
-                );
+                document.getElementById("loginMessage");
+
+
+            const email =
+                emailElement
+                    ? emailElement.value.trim()
+                    : "";
+
+            const password =
+                passwordElement
+                    ? passwordElement.value
+                    : "";
 
 
             if (!email || !password) {
 
-                message.className =
-                    "message-box error";
+                if (message) {
 
-                message.innerText =
-                    "Please enter email and password.";
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        "Please enter email and password.";
+
+                }
 
                 return;
+
             }
 
 
@@ -262,11 +342,15 @@ if (loginForm) {
                 );
 
 
-                message.className =
-                    "message-box success";
+                if (message) {
 
-                message.innerText =
-                    "Login successful!";
+                    message.className =
+                        "message-box success";
+
+                    message.innerText =
+                        "Login successful!";
+
+                }
 
 
                 setTimeout(
@@ -276,23 +360,27 @@ if (loginForm) {
                             "/dashboard";
 
                     },
-                    800
+                    700
                 );
 
 
             } catch (error) {
 
                 console.error(
-                    "Login error:",
+                    "❌ Login error:",
                     error
                 );
 
 
-                message.className =
-                    "message-box error";
+                if (message) {
 
-                message.innerText =
-                    getFirebaseError(error);
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        getFirebaseError(error);
+
+                }
 
             }
 
@@ -316,7 +404,9 @@ window.togglePassword =
 
 
         if (!input) {
+
             return;
+
         }
 
 
@@ -349,7 +439,7 @@ window.logout =
         } catch (error) {
 
             console.error(
-                "Logout error:",
+                "❌ Logout error:",
                 error
             );
 
@@ -370,7 +460,6 @@ window.analyzeComplaint =
                 "complaintDescription"
             );
 
-
         const result =
             document.getElementById(
                 "aiResult"
@@ -378,6 +467,10 @@ window.analyzeComplaint =
 
 
         if (!descriptionElement || !result) {
+
+            console.error(
+                "Complaint description or AI result element not found."
+            );
 
             return;
 
@@ -418,14 +511,18 @@ window.analyzeComplaint =
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                                 "application/json"
+
                         },
 
                         body:
                             JSON.stringify({
+
                                 complaint:
                                     description
+
                             })
 
                     }
@@ -433,38 +530,39 @@ window.analyzeComplaint =
 
 
             const data =
-                await response.json();
+                await getResponseJSON(response);
 
 
-            if (data.success) {
+            console.log(
+                "🤖 Gemini response:",
+                data
+            );
 
-                result.className =
-                    "ai-result show";
 
-                result.innerHTML =
-                    formatAIResponse(
-                        data.analysis
-                    );
+            if (!response.ok || !data.success) {
 
-            } else {
-
-                result.className =
-                    "ai-result show";
-
-                result.innerHTML =
-                    "❌ " +
-                    escapeHTML(
-                        data.message ||
-                        "AI analysis failed."
-                    );
+                throw new Error(
+                    data.message ||
+                    data.error ||
+                    "AI analysis failed."
+                );
 
             }
+
+
+            result.className =
+                "ai-result show";
+
+            result.innerHTML =
+                formatAIResponse(
+                    data.analysis
+                );
 
 
         } catch (error) {
 
             console.error(
-                "Gemini error:",
+                "❌ Gemini error:",
                 error
             );
 
@@ -473,7 +571,11 @@ window.analyzeComplaint =
                 "ai-result show";
 
             result.innerHTML =
-                "❌ Unable to connect to AI.";
+                "❌ " +
+                escapeHTML(
+                    error.message ||
+                    "Unable to connect to AI."
+                );
 
         }
 
@@ -481,7 +583,7 @@ window.analyzeComplaint =
 
 
 // =========================================================
-// COMPLAINT SUBMIT
+// NEW COMPLAINT SUBMISSION
 // =========================================================
 
 const complaintForm =
@@ -492,6 +594,11 @@ const complaintForm =
 
 if (complaintForm) {
 
+    console.log(
+        "📝 Complaint form detected."
+    );
+
+
     complaintForm.addEventListener(
         "submit",
         async function(event) {
@@ -499,16 +606,32 @@ if (complaintForm) {
             event.preventDefault();
 
 
-            // Prevent duplicate submissions
+            console.log(
+                "📤 Complaint submit started..."
+            );
+
+
+            // -------------------------------------------------
+            // PREVENT DUPLICATE SUBMISSION
+            // -------------------------------------------------
+
             if (
                 complaintForm.dataset.submitting ===
                 "true"
             ) {
 
+                console.log(
+                    "⚠️ Already submitting..."
+                );
+
                 return;
 
             }
 
+
+            // -------------------------------------------------
+            // GET ELEMENTS
+            // -------------------------------------------------
 
             const titleElement =
                 document.getElementById(
@@ -534,6 +657,10 @@ if (complaintForm) {
                 );
 
 
+            // -------------------------------------------------
+            // GET VALUES
+            // -------------------------------------------------
+
             const title =
                 titleElement
                     ? titleElement.value.trim()
@@ -542,7 +669,7 @@ if (complaintForm) {
 
             const category =
                 categoryElement
-                    ? categoryElement.value
+                    ? categoryElement.value.trim()
                     : "";
 
 
@@ -552,12 +679,30 @@ if (complaintForm) {
                     : "";
 
 
+            // -------------------------------------------------
+            // CURRENT USER
+            // -------------------------------------------------
+
             const user =
                 auth.currentUser;
 
 
-            // Check login
+            console.log(
+                "👤 Current Firebase user:",
+                user
+            );
+
+
+            // -------------------------------------------------
+            // LOGIN CHECK
+            // -------------------------------------------------
+
             if (!user) {
+
+                console.error(
+                    "❌ User is not logged in."
+                );
+
 
                 if (message) {
 
@@ -574,8 +719,11 @@ if (complaintForm) {
             }
 
 
-            // Validate
-            if (!title || !description) {
+            // -------------------------------------------------
+            // VALIDATION
+            // -------------------------------------------------
+
+            if (!title) {
 
                 if (message) {
 
@@ -583,7 +731,13 @@ if (complaintForm) {
                         "message-box error";
 
                     message.innerText =
-                        "Please fill complaint title and description.";
+                        "Please enter complaint title.";
+
+                }
+
+                if (titleElement) {
+
+                    titleElement.focus();
 
                 }
 
@@ -592,31 +746,133 @@ if (complaintForm) {
             }
 
 
-            try {
+            if (!category) {
 
-                // Lock form
-                complaintForm.dataset.submitting =
-                    "true";
+                if (message) {
 
+                    message.className =
+                        "message-box error";
 
-                const submitButton =
-                    complaintForm.querySelector(
-                        'button[type="submit"]'
-                    );
-
-
-                if (submitButton) {
-
-                    submitButton.disabled =
-                        true;
-
-                    submitButton.innerText =
-                        "Submitting...";
+                    message.innerText =
+                        "Please select a complaint category.";
 
                 }
 
+                if (categoryElement) {
 
-                // Send complaint to Flask
+                    categoryElement.focus();
+
+                }
+
+                return;
+
+            }
+
+
+            if (!description) {
+
+                if (message) {
+
+                    message.className =
+                        "message-box error";
+
+                    message.innerText =
+                        "Please enter complaint description.";
+
+                }
+
+                if (descriptionElement) {
+
+                    descriptionElement.focus();
+
+                }
+
+                return;
+
+            }
+
+
+            // -------------------------------------------------
+            // LOCK FORM
+            // -------------------------------------------------
+
+            complaintForm.dataset.submitting =
+                "true";
+
+
+            const submitButton =
+                complaintForm.querySelector(
+                    'button[type="submit"]'
+                );
+
+
+            const originalButtonText =
+                submitButton
+                    ? submitButton.innerText
+                    : "Submit Complaint";
+
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+
+                submitButton.innerText =
+                    "Submitting...";
+
+            }
+
+
+            if (message) {
+
+                message.className =
+                    "message-box";
+
+                message.innerText =
+                    "Submitting your complaint...";
+
+            }
+
+
+            // -------------------------------------------------
+            // DATA
+            // -------------------------------------------------
+
+            const complaintData = {
+
+                userId:
+                    user.uid,
+
+                name:
+                    user.displayName ||
+                    "Student",
+
+                email:
+                    user.email || "",
+
+                title:
+                    title,
+
+                description:
+                    description,
+
+                category:
+                    category
+
+            };
+
+
+            console.log(
+                "📦 Sending complaint:",
+                complaintData
+            );
+
+
+            // -------------------------------------------------
+            // SEND TO FLASK
+            // -------------------------------------------------
+
+            try {
+
                 const response =
                     await fetch(
                         "/submit-complaint",
@@ -627,49 +883,48 @@ if (complaintForm) {
                             headers: {
 
                                 "Content-Type":
+                                    "application/json",
+
+                                "Accept":
                                     "application/json"
 
                             },
 
                             body:
-                                JSON.stringify({
-
-                                    userId:
-                                        user.uid,
-
-                                    name:
-                                        user.displayName ||
-                                        "Student",
-
-                                    email:
-                                        user.email,
-
-                                    title:
-                                        title,
-
-                                    description:
-                                        description,
-
-                                    category:
-                                        category
-
-                                })
+                                JSON.stringify(
+                                    complaintData
+                                )
 
                         }
                     );
 
 
+                console.log(
+                    "📡 Server status:",
+                    response.status
+                );
+
+
                 const data =
-                    await response.json();
+                    await getResponseJSON(
+                        response
+                    );
 
 
                 console.log(
-                    "Complaint response:",
+                    "📥 Complaint server response:",
                     data
                 );
 
 
-                if (response.ok && data.success) {
+                // -------------------------------------------------
+                // SUCCESS
+                // -------------------------------------------------
+
+                if (
+                    response.ok &&
+                    data.success === true
+                ) {
 
                     if (message) {
 
@@ -677,17 +932,46 @@ if (complaintForm) {
                             "message-box success";
 
                         message.innerText =
-                            "Complaint submitted successfully! ID: " +
-                            data.complaintId;
+                            "✅ Complaint submitted successfully! " +
+                            "Complaint ID: " +
+                            (
+                                data.complaintId ||
+                                "Generated"
+                            );
 
                     }
 
 
+                    console.log(
+                        "✅ Complaint submitted:",
+                        data.complaintId
+                    );
+
+
                     // Reset form
+
                     complaintForm.reset();
 
 
-                    // Go dashboard
+                    // Unlock
+
+                    complaintForm.dataset.submitting =
+                        "false";
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.innerText =
+                            originalButtonText;
+
+                    }
+
+
+                    // Redirect dashboard
+
                     setTimeout(
                         function() {
 
@@ -699,20 +983,30 @@ if (complaintForm) {
                     );
 
 
-                } else {
-
-                    throw new Error(
-                        data.message ||
-                        "Complaint submission failed."
-                    );
+                    return;
 
                 }
+
+
+                // -------------------------------------------------
+                // SERVER ERROR
+                // -------------------------------------------------
+
+                throw new Error(
+
+                    data.message ||
+
+                    data.error ||
+
+                    "Complaint submission failed."
+
+                );
 
 
             } catch (error) {
 
                 console.error(
-                    "Complaint submit error:",
+                    "❌ Complaint submission error:",
                     error
                 );
 
@@ -723,21 +1017,19 @@ if (complaintForm) {
                         "message-box error";
 
                     message.innerText =
-                        error.message ||
-                        "Something went wrong.";
+                        "❌ " +
+                        (
+                            error.message ||
+                            "Unable to submit complaint."
+                        );
 
                 }
 
 
-                // Unlock form
+                // Unlock
+
                 complaintForm.dataset.submitting =
                     "false";
-
-
-                const submitButton =
-                    complaintForm.querySelector(
-                        'button[type="submit"]'
-                    );
 
 
                 if (submitButton) {
@@ -746,7 +1038,7 @@ if (complaintForm) {
                         false;
 
                     submitButton.innerText =
-                        "Submit Complaint";
+                        originalButtonText;
 
                 }
 
@@ -759,7 +1051,7 @@ if (complaintForm) {
 
 
 // =========================================================
-// DASHBOARD - LOAD COMPLAINTS
+// LOAD DASHBOARD COMPLAINTS
 // =========================================================
 
 async function loadDashboardComplaints() {
@@ -767,6 +1059,24 @@ async function loadDashboardComplaints() {
     const complaintList =
         document.getElementById(
             "complaintList"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "complaintLoading"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "emptyComplaint"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "complaintError"
         );
 
 
@@ -795,6 +1105,7 @@ async function loadDashboardComplaints() {
 
 
     // Not dashboard
+
     if (!complaintList) {
 
         return;
@@ -809,23 +1120,53 @@ async function loadDashboardComplaints() {
         );
 
 
-        const response =
-            await fetch(
-                "/complaints"
-            );
+        if (loading) {
 
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Failed to fetch complaints."
-            );
+            loading.style.display =
+                "block";
 
         }
 
 
+        if (empty) {
+
+            empty.style.display =
+                "none";
+
+        }
+
+
+        if (errorBox) {
+
+            errorBox.style.display =
+                "none";
+
+        }
+
+
+        const response =
+            await fetch(
+                "/complaints",
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        console.log(
+            "📡 Complaints API status:",
+            response.status
+        );
+
+
         const data =
-            await response.json();
+            await getResponseJSON(
+                response
+            );
 
 
         console.log(
@@ -834,23 +1175,32 @@ async function loadDashboardComplaints() {
         );
 
 
-        if (!data.success) {
+        if (!response.ok || !data.success) {
 
             throw new Error(
+
                 data.error ||
-                "Unable to load complaints."
+
+                data.message ||
+
+                "Failed to fetch complaints."
+
             );
 
         }
 
 
         let complaints =
-            data.complaints || [];
+            Array.isArray(
+                data.complaints
+            )
+                ? data.complaints
+                : [];
 
 
-        // =====================================================
-        // FILTER CURRENT USER
-        // =====================================================
+        // -------------------------------------------------
+        // CURRENT USER FILTER
+        // -------------------------------------------------
 
         const currentUser =
             auth.currentUser;
@@ -863,8 +1213,12 @@ async function loadDashboardComplaints() {
                     function(complaint) {
 
                         return (
-                            complaint.userId ===
-                            currentUser.uid
+                            String(
+                                complaint.userId || ""
+                            ) ===
+                            String(
+                                currentUser.uid
+                            )
                         );
 
                     }
@@ -879,9 +1233,29 @@ async function loadDashboardComplaints() {
         );
 
 
-        // =====================================================
+        // -------------------------------------------------
+        // SORT
+        // -------------------------------------------------
+
+        complaints.sort(
+            function(a, b) {
+
+                return (
+                    new Date(
+                        b.createdAt || 0
+                    ) -
+                    new Date(
+                        a.createdAt || 0
+                    )
+                );
+
+            }
+        );
+
+
+        // -------------------------------------------------
         // STATISTICS
-        // =====================================================
+        // -------------------------------------------------
 
         const total =
             complaints.length;
@@ -891,13 +1265,9 @@ async function loadDashboardComplaints() {
             complaints.filter(
                 function(complaint) {
 
-                    return (
-                        String(
-                            complaint.status || ""
-                        )
-                            .toLowerCase() ===
-                        "pending"
-                    );
+                    return normalizeStatus(
+                        complaint.status
+                    ) === "pending";
 
                 }
             ).length;
@@ -907,20 +1277,9 @@ async function loadDashboardComplaints() {
             complaints.filter(
                 function(complaint) {
 
-                    const status =
-                        String(
-                            complaint.status || ""
-                        )
-                            .toLowerCase()
-                            .replace(
-                                /\s+/g,
-                                ""
-                            );
-
-                    return (
-                        status ===
-                        "inprogress"
-                    );
+                    return normalizeStatus(
+                        complaint.status
+                    ) === "inprogress";
 
                 }
             ).length;
@@ -930,13 +1289,9 @@ async function loadDashboardComplaints() {
             complaints.filter(
                 function(complaint) {
 
-                    return (
-                        String(
-                            complaint.status || ""
-                        )
-                            .toLowerCase() ===
-                        "resolved"
-                    );
+                    return normalizeStatus(
+                        complaint.status
+                    ) === "resolved";
 
                 }
             ).length;
@@ -974,57 +1329,49 @@ async function loadDashboardComplaints() {
         }
 
 
-        // =====================================================
+        // -------------------------------------------------
+        // LOADING HIDE
+        // -------------------------------------------------
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        // -------------------------------------------------
         // EMPTY
-        // =====================================================
+        // -------------------------------------------------
 
         if (complaints.length === 0) {
 
-            complaintList.innerHTML = `
+            complaintList.innerHTML = "";
 
-                <div class="empty-state">
+            if (empty) {
 
-                    <div>📭</div>
+                empty.style.display =
+                    "block";
 
-                    <h3>No complaints yet</h3>
-
-                    <p>
-                        Submit your first complaint
-                        to get started.
-                    </p>
-
-                </div>
-
-            `;
+            }
 
             return;
 
         }
 
 
-        // =====================================================
-        // SORT LATEST FIRST
-        // =====================================================
+        if (empty) {
 
-        complaints.sort(
-            function(a, b) {
+            empty.style.display =
+                "none";
 
-                return (
-                    new Date(
-                        b.createdAt || 0
-                    ) -
-                    new Date(
-                        a.createdAt || 0
-                    )
-                );
-
-            }
-        );
+        }
 
 
-        // =====================================================
-        // DISPLAY
-        // =====================================================
+        // -------------------------------------------------
+        // DISPLAY COMPLAINTS
+        // -------------------------------------------------
 
         complaintList.innerHTML =
             complaints
@@ -1037,12 +1384,9 @@ async function loadDashboardComplaints() {
 
 
                         const statusClass =
-                            String(status)
-                                .toLowerCase()
-                                .replace(
-                                    /\s+/g,
-                                    "-"
-                                );
+                            normalizeStatus(
+                                status
+                            );
 
 
                         let createdDate =
@@ -1063,7 +1407,9 @@ async function loadDashboardComplaints() {
                             } catch (error) {
 
                                 createdDate =
-                                    complaint.createdAt;
+                                    String(
+                                        complaint.createdAt
+                                    );
 
                             }
 
@@ -1086,26 +1432,24 @@ async function loadDashboardComplaints() {
                                         </h3>
 
                                         <span class="complaint-id">
-
                                             ID:
                                             ${escapeHTML(
                                                 complaint.complaintId ||
                                                 "N/A"
                                             )}
-
                                         </span>
 
                                     </div>
 
 
                                     <span
-                                        class="status ${statusClass}"
+                                        class="status ${escapeHTML(
+                                            statusClass
+                                        )}"
                                     >
-
                                         ${escapeHTML(
                                             status
                                         )}
-
                                     </span>
 
                                 </div>
@@ -1124,25 +1468,19 @@ async function loadDashboardComplaints() {
                                 <div class="complaint-meta">
 
                                     <span>
-
                                         📂
-
                                         ${escapeHTML(
                                             complaint.category ||
                                             "Other"
                                         )}
-
                                     </span>
 
 
                                     <span>
-
                                         📅
-
                                         ${escapeHTML(
                                             createdDate
                                         )}
-
                                     </span>
 
                                 </div>
@@ -1164,21 +1502,56 @@ async function loadDashboardComplaints() {
         );
 
 
-        complaintList.innerHTML = `
+        if (loading) {
 
-            <div class="empty-state">
+            loading.style.display =
+                "none";
 
-                <div>❌</div>
+        }
 
-                <h3>Unable to load complaints</h3>
 
-                <p>
-                    Please refresh the page and try again.
-                </p>
+        if (errorBox) {
 
-            </div>
+            errorBox.style.display =
+                "block";
 
-        `;
+            const errorMessage =
+                document.getElementById(
+                    "complaintErrorMessage"
+                );
+
+            if (errorMessage) {
+
+                errorMessage.innerText =
+                    error.message ||
+                    "Unable to load complaints.";
+
+            }
+
+        } else {
+
+            complaintList.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div>❌</div>
+
+                    <h3>
+                        Unable to load complaints
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(
+                            error.message ||
+                            "Please refresh the page."
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
 
     }
 
@@ -1186,7 +1559,15 @@ async function loadDashboardComplaints() {
 
 
 // =========================================================
-// DASHBOARD AUTH STATE
+// MAKE LOAD COMPLAINTS AVAILABLE TO HTML
+// =========================================================
+
+window.loadComplaints =
+    loadDashboardComplaints;
+
+
+// =========================================================
+// FIREBASE AUTH STATE
 // =========================================================
 
 onAuthStateChanged(
@@ -1199,7 +1580,6 @@ onAuthStateChanged(
             );
 
 
-        // User logged in
         if (user) {
 
             console.log(
@@ -1218,13 +1598,36 @@ onAuthStateChanged(
             }
 
 
-            // Load dashboard
             await loadDashboardComplaints();
+
+        } else {
+
+            console.log(
+                "👤 No user logged in."
+            );
 
         }
 
     }
 );
+
+
+// =========================================================
+// NORMALIZE STATUS
+// =========================================================
+
+function normalizeStatus(status) {
+
+    return String(
+        status || ""
+    )
+        .toLowerCase()
+        .replace(
+            /[\s_-]+/g,
+            ""
+        );
+
+}
 
 
 // =========================================================
@@ -1263,22 +1666,22 @@ function formatAIResponse(text) {
         )
 
         .replace(
-            /Category:/g,
+            /Category:/gi,
             "<strong>Category:</strong>"
         )
 
         .replace(
-            /Priority:/g,
+            /Priority:/gi,
             "<strong>Priority:</strong>"
         )
 
         .replace(
-            /Summary:/g,
+            /Summary:/gi,
             "<strong>Summary:</strong>"
         )
 
         .replace(
-            /Suggested Action:/g,
+            /Suggested Action:/gi,
             "<strong>Suggested Action:</strong>"
         );
 
@@ -1291,7 +1694,9 @@ function formatAIResponse(text) {
 
 function escapeHTML(value) {
 
-    return String(value)
+    return String(
+        value ?? ""
+    )
 
         .replace(
             /&/g,
@@ -1359,6 +1764,16 @@ function getFirebaseError(error) {
             return "Incorrect password.";
 
 
+        case "auth/too-many-requests":
+
+            return "Too many attempts. Please try again later.";
+
+
+        case "auth/network-request-failed":
+
+            return "Network error. Please check your internet connection.";
+
+
         default:
 
             return (
@@ -1372,9 +1787,17 @@ function getFirebaseError(error) {
 
 
 // =========================================================
-// CONSOLE READY MESSAGE
+// READY
 // =========================================================
 
 console.log(
-    "🚀 Online Complaint frontend loaded successfully"
+    "✅ Firebase initialized."
+);
+
+console.log(
+    "🔥 Auth ready."
+);
+
+console.log(
+    "📋 Complaint system ready."
 );
