@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard | ComplaintCare</title>
+    <title>New Complaint | ComplaintCare</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -34,384 +34,363 @@
     </div>
 
 
-    <div class="dashboard-user">
+    <a
+        href="/dashboard"
+        class="back-btn">
 
-        <span id="userName">
-            Loading...
-        </span>
+        ← Dashboard
 
-
-        <button
-            type="button"
-            id="logoutBtn">
-
-            Logout
-
-        </button>
-
-    </div>
+    </a>
 
 </nav>
 
 
 
 <!-- =====================================================
-     MAIN DASHBOARD
+     MAIN
 ===================================================== -->
 
-<main class="dashboard">
+<main class="complaint-page">
 
 
     <!-- =================================================
-         WELCOME SECTION
+         PAGE HEADING
     ================================================== -->
 
-    <section class="welcome">
+    <div class="page-heading">
 
-        <div>
+        <span class="small-label">
+            NEW COMPLAINT
+        </span>
 
-            <span class="small-label">
+        <h1>
+            Tell us what happened
+        </h1>
 
-                DASHBOARD
+        <p>
+            Provide the details below and our team
+            will take care of the rest.
+        </p>
 
-            </span>
-
-
-            <h1>
-
-                Welcome back! 👋
-
-            </h1>
-
-
-            <p>
-
-                Manage and track your complaints.
-
-            </p>
-
-        </div>
-
-
-        <a
-            href="/complaint"
-            class="primary-btn">
-
-            + New Complaint
-
-        </a>
-
-    </section>
+    </div>
 
 
 
     <!-- =================================================
-         DASHBOARD STATISTICS
+         LAYOUT
     ================================================== -->
 
-    <section class="dashboard-stats">
+    <div class="complaint-layout">
 
 
-        <!-- TOTAL -->
+        <!-- =================================================
+             COMPLAINT FORM
+        ================================================== -->
 
-        <div class="dash-card">
+        <div class="complaint-form-card">
 
-            <div class="dash-icon purple">
 
-                📋
+            <form id="complaintForm">
 
-            </div>
 
+                <!-- NAME -->
 
-            <div>
+                <label for="name">
+                    Your Name
+                </label>
 
-                <span>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                    required
+                >
 
-                    Total Complaints
 
-                </span>
 
+                <!-- EMAIL -->
 
-                <strong id="totalComplaints">
+                <label for="email">
+                    Email Address
+                </label>
 
-                    0
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
 
-                </strong>
 
-            </div>
 
-        </div>
+                <!-- TITLE -->
 
+                <label for="complaintTitle">
+                    Complaint Title
+                </label>
 
+                <input
+                    type="text"
+                    id="complaintTitle"
+                    name="title"
+                    placeholder="Briefly describe your complaint"
+                    required
+                >
 
-        <!-- PENDING -->
 
-        <div class="dash-card">
 
-            <div class="dash-icon orange">
+                <!-- CATEGORY -->
 
-                ⏳
+                <label for="complaintCategory">
+                    Category
+                </label>
 
-            </div>
+                <select
+                    id="complaintCategory"
+                    name="category"
+                    required
+                >
 
+                    <option value="">
+                        Select a category
+                    </option>
 
-            <div>
+                    <option value="Academic">
+                        Academic
+                    </option>
 
-                <span>
+                    <option value="Infrastructure">
+                        Infrastructure
+                    </option>
 
-                    Pending
+                    <option value="Hostel">
+                        Hostel
+                    </option>
 
-                </span>
+                    <option value="Transport">
+                        Transport
+                    </option>
 
+                    <option value="Library">
+                        Library
+                    </option>
 
-                <strong id="pendingComplaints">
+                    <option value="Faculty">
+                        Faculty
+                    </option>
 
-                    0
+                    <option value="IT / Technical">
+                        IT / Technical
+                    </option>
 
-                </strong>
+                    <option value="Other">
+                        Other
+                    </option>
 
-            </div>
+                </select>
 
-        </div>
 
 
+                <!-- DESCRIPTION -->
 
-        <!-- IN PROGRESS -->
+                <label for="complaintDescription">
+                    Complaint Description
+                </label>
 
-        <div class="dash-card">
+                <textarea
+                    id="complaintDescription"
+                    name="description"
+                    rows="7"
+                    placeholder="Explain your complaint in detail..."
+                    required
+                ></textarea>
 
-            <div class="dash-icon blue">
 
-                🔄
 
-            </div>
+                <!-- =================================================
+                     AI ANALYSIS BUTTON
+                ================================================== -->
 
+                <button
+                    type="button"
+                    class="ai-btn"
+                    id="analyzeBtn">
 
-            <div>
+                    🤖 Analyze with Gemini AI
 
-                <span>
+                </button>
 
-                    In Progress
 
-                </span>
 
+                <!-- AI RESULT -->
 
-                <strong id="progressComplaints">
+                <div
+                    id="aiResult"
+                    class="ai-result">
 
-                    0
+                </div>
 
-                </strong>
 
-            </div>
 
-        </div>
+                <!-- =================================================
+                     SUBMIT BUTTON
+                ================================================== -->
 
+                <button
+                    type="submit"
+                    class="auth-btn submit-btn"
+                    id="submitComplaintBtn">
 
+                    Submit Complaint
 
-        <!-- RESOLVED -->
+                    <span>
+                        →
+                    </span>
 
-        <div class="dash-card">
+                </button>
 
-            <div class="dash-icon green">
 
-                ✓
 
-            </div>
+                <!-- MESSAGE -->
 
+                <div
+                    id="complaintMessage"
+                    class="message-box">
 
-            <div>
+                </div>
 
-                <span>
 
-                    Resolved
+            </form>
 
-                </span>
-
-
-                <strong id="resolvedComplaints">
-
-                    0
-
-                </strong>
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =================================================
-         COMPLAINT SECTION
-    ================================================== -->
-
-    <section class="dashboard-section">
-
-
-        <!-- HEADER -->
-
-        <div class="section-header">
-
-            <div>
-
-                <h2>
-
-                    Recent Complaints
-
-                </h2>
-
-
-                <p>
-
-                    Track your latest complaints
-
-                </p>
-
-            </div>
-
-
-            <a href="/complaint">
-
-                Submit New
-
-            </a>
 
         </div>
 
 
 
         <!-- =================================================
-             LOADING
+             INFORMATION CARD
         ================================================== -->
 
-        <div
-            id="complaintLoading"
-            class="empty-state">
+        <div class="info-card">
 
-            <div>
 
-                ⏳
-
+            <div class="info-icon">
+                💡
             </div>
 
 
             <h3>
-
-                Loading complaints...
-
+                How it works
             </h3>
 
 
-            <p>
 
-                Please wait while we load your complaints.
+            <!-- STEP 01 -->
 
-            </p>
+            <div class="step">
 
-        </div>
+                <span>
+                    01
+                </span>
 
+                <div>
 
+                    <strong>
+                        Submit
+                    </strong>
 
-        <!-- =================================================
-             COMPLAINT LIST
-        ================================================== -->
+                    <p>
+                        Tell us about your issue.
+                    </p>
 
-        <div
-            id="complaintList"
-            class="complaint-list">
-
-        </div>
-
-
-
-        <!-- =================================================
-             EMPTY STATE
-        ================================================== -->
-
-        <div
-            id="emptyComplaint"
-            class="empty-state"
-            style="display:none;">
-
-            <div>
-
-                📭
+                </div>
 
             </div>
 
 
-            <h3>
 
-                No complaints yet
+            <!-- STEP 02 -->
 
-            </h3>
+            <div class="step">
 
+                <span>
+                    02
+                </span>
 
-            <p>
+                <div>
 
-                Submit your first complaint
-                to get started.
+                    <strong>
+                        AI Analysis
+                    </strong>
 
-            </p>
+                    <p>
+                        Gemini helps analyze and
+                        categorize your complaint.
+                    </p>
 
-
-            <a
-                href="/complaint"
-                class="primary-btn">
-
-                + Submit Complaint
-
-            </a>
-
-        </div>
-
-
-
-        <!-- =================================================
-             ERROR STATE
-        ================================================== -->
-
-        <div
-            id="complaintError"
-            class="empty-state"
-            style="display:none;">
-
-            <div>
-
-                ⚠️
+                </div>
 
             </div>
 
 
-            <h3>
 
-                Unable to load complaints
+            <!-- STEP 03 -->
 
-            </h3>
+            <div class="step">
+
+                <span>
+                    03
+                </span>
+
+                <div>
+
+                    <strong>
+                        Track
+                    </strong>
+
+                    <p>
+                        Monitor your complaint status
+                        from the dashboard.
+                    </p>
+
+                </div>
+
+            </div>
 
 
-            <p id="complaintErrorMessage">
 
-                Please try again.
+            <!-- STEP 04 -->
 
-            </p>
+            <div class="step">
 
+                <span>
+                    04
+                </span>
 
-            <button
-                type="button"
-                class="primary-btn"
-                id="retryComplaintsBtn">
+                <div>
 
-                Retry
+                    <strong>
+                        Resolve
+                    </strong>
 
-            </button>
+                    <p>
+                        Admin reviews and resolves
+                        the complaint.
+                    </p>
+
+                </div>
+
+            </div>
+
 
         </div>
 
 
-    </section>
+    </div>
 
 
 </main>
@@ -425,72 +404,6 @@
 <script
     type="module"
     src="{{ url_for('static', filename='script.js') }}">
-</script>
-
-
-
-<!-- =====================================================
-     DASHBOARD BUTTON HANDLERS
-===================================================== -->
-
-<script type="module">
-
-    const logoutBtn =
-        document.getElementById("logoutBtn");
-
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    typeof window.logout ===
-                    "function"
-                ) {
-
-                    window.logout();
-
-                }
-
-            }
-        );
-
-    }
-
-
-
-    const retryBtn =
-        document.getElementById(
-            "retryComplaintsBtn"
-        );
-
-
-    if (retryBtn) {
-
-        retryBtn.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    typeof window.loadComplaints ===
-                    "function"
-                ) {
-
-                    window.loadComplaints();
-
-                } else {
-
-                    window.location.reload();
-
-                }
-
-            }
-        );
-
-    }
-
 </script>
 
 
